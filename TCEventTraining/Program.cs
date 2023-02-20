@@ -13,6 +13,10 @@ namespace TCEventTraining
             CollegeClassModel history = new CollegeClassModel("History 101", 3);
             CollegeClassModel math = new CollegeClassModel("Caculus 201", 2);
 
+            // Ett event består av tre delar. Först själva deklarationen av eventhandlerna
+            // Sedan har vi lyssnaren som står standby och agerar om den hör att eventet ropar.
+            // Slutligen har vi invokationen av eventet, det som triggar det.
+
             // Genom att här använda oss av eventet vi skapade i andra klassen
             // så lyssnar vi efter det. TC beskriver det som att den andra klassen,
             // CollegeClassModel i det här fallet, skriker och här så lyssnar vi efter
@@ -38,13 +42,15 @@ namespace TCEventTraining
         // annan klass så det är lite trippy men så ska det vara.
         // Den tar in ett objekt, vilket gör att den kan ta in vad som helst bara vi castar om det. 
         // string e kommer från att det var av typen string som vi skapade eventet utifrån
+        // Detta är själva lyssnaren för eventet (som wires up med hjälp av det på rad 22
         private static void History_EnrollmentFull(object sender, string e)
         {
             // Ett exempel på ett meddelande man ska låta skrivas ut. Vi vet att det är
             // från history det kommer eftersom det är på instansieringen av history
             // som vi fäste det här eventet.
-
-            Console.WriteLine("The enrollment is full for history");
+            Console.WriteLine();
+            Console.WriteLine(e);
+            Console.WriteLine();
         }
     }
 
@@ -59,6 +65,7 @@ namespace TCEventTraining
     public class CollegeClassModel
     {
         // Skapar här ett event som andra klasser kan lyssna på.
+        // Detta är själva deklarationen av EventHandler "the glue in the middle"
         public event EventHandler<string> EnrollmentFull;
 
         private List<string> enrolledStudents = new List<string>();
@@ -81,11 +88,26 @@ namespace TCEventTraining
                 enrolledStudents.Add(studentName);
                 output = $"{studentName} was enrolled to {CourseTitle}";
                 //check to see if we are maxed out
+
+                if (enrolledStudents.Count == MaximumStudents)
+                {
+                    // Här kommer nu nästa del av eventet och det är vad som utlöser det.
+                    // Om det inte är nån som lyssnar så vill vi inte att det ska kastas ett
+                    // exception så därför sätts det ett frågetecken efter eventet. Frågetecknet
+                    // gör "if its not null, do the next thing". Är den null, ignorera det här
+                    // Invoke vill ha en inparameter och det är i det här fallet sändaren. Är man inne i en 
+                    // instans av en klass och vill skicka med den så räcker det att man skriver "this"
+
+                    // Vad som ska in i Invoke() styrs av när vi skapade eventet. 
+                    EnrollmentFull?.Invoke(this, "The enrollment is full for history. Det här kommer från invokationet");
+                }
+                
             }
             else
             {
                 waitingList.Add(studentName);
                 output = $"{studentName} was added to waitinglist in {CourseTitle}";
+                               
             }
             return output;
         }
