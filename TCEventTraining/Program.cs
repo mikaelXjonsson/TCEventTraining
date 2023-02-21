@@ -38,7 +38,7 @@ namespace TCEventTraining
             Console.ReadLine();
         }
 
-        // Metoden som skapas vid +=. Den är private men kan ändå kallas på från en 
+        // Metoden som skapas vid += är private men kan ändå kallas på från en 
         // annan klass så det är lite trippy men så ska det vara.
         // Den tar in ett objekt, vilket gör att den kan ta in vad som helst bara vi castar om det. 
         // string e kommer från att det var av typen string som vi skapade eventet utifrån
@@ -99,9 +99,8 @@ namespace TCEventTraining
                     // instans av en klass och vill skicka med den så räcker det att man skriver "this"
 
                     // Vad som ska in i Invoke() styrs av när vi skapade eventet. 
-                    EnrollmentFull?.Invoke(this, "The enrollment is full for history. Det här kommer från invokationet");
+                    EnrollmentFull?.Invoke(this, "The enrollment is full for history. Det här kommer från invokationen");
                 }
-                
             }
             else
             {
