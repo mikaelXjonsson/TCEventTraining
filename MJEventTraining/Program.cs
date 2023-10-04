@@ -35,13 +35,13 @@ namespace MJEventTraining
             for (int i = 0; i <= 100; i++)
             {
                 Console.WriteLine(i);
-                if (i == 13)
+                if (i == 99)
                 {
                     // Koden fungerar även utan ? men då kommer den att kasta ett exception om 
                     // CounterDone är null. Nu tillåts den vara null och hoppar bara över det här
                     // om så är fallet
                     // EFtersom det här är sändaren enligt TC så är det alltså Publisher?
-                    CounterDone?.Invoke(this, "You have reach 13");
+                    CounterDone?.Invoke(this, "You have reach 99");
                 }
             }
         }
